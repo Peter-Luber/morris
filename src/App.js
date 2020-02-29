@@ -45,7 +45,7 @@ class App extends React.Component {
             className="Player-header"
             onClick={() => console.log(this.picToggle())}
           >
-            pop 5
+            POP 5
           </span>
           <div id="playBox">
             <img
