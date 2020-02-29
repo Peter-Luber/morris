@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
-import helados from "./midi/pissypamper.mp3";
-
-let audio = new Audio(helados);
+import playButton from "./img/play.svg";
+import pauseButton from "./img/pause.svg";
+import carti from "./midi/pissypamper.mp3";
 
 class App extends React.Component {
   state = {
@@ -19,7 +19,6 @@ class App extends React.Component {
       case "⏸":
         song.pause();
         this.setState({ playing: "▶️", track: title });
-
         break;
       default:
         console.log("fuck");
@@ -27,19 +26,27 @@ class App extends React.Component {
   };
 
   picToggle = () => {
-    switch (this.state.playing) {
-      case "▶️":
-        return "https://521dimensions.com/img/open-source/amplitudejs/examples/single-song/play.svg";
-      case "⏸":
-        return "https://521dimensions.com/img/open-source/amplitudejs/examples/single-song/pause.svg";
-      default:
-        break;
+    while (this.state.playing === "▶️") {
+      return playButton;
     }
+    while (this.state.playing === "⏸") {
+      return pauseButton;
+    }
+  };
+
+  trackEnd = () => {
+    this.setState({ playing: "⏸", track: "" });
   };
 
   render() {
     return (
       <div className="App">
+        <audio
+          ref="audioRef"
+          src={carti}
+          id="carti"
+          onEnded={() => this.trackEnd()}
+        ></audio>
         <div className="Player">
           <span
             className="Player-header"
@@ -53,15 +60,19 @@ class App extends React.Component {
               alt="null"
               src={this.picToggle()}
               onClick={() =>
-                this.play(audio, "playboi carti - pissy pamper ft. young nudy")
+                this.play(
+                  this.refs.audioRef,
+                  "playboi carti - pissy pamper ft. young nudy"
+                )
               }
-              playing="paused"
             ></img>
             <div
               id="emojiButton"
-              playing="paused"
               onClick={() =>
-                this.play(audio, "playboi carti - pissy pamper ft. young nudy")
+                this.play(
+                  this.refs.audioRef,
+                  "playboi carti - pissy pamper ft. young nudy"
+                )
               }
               text={this.state.playing}
             >
