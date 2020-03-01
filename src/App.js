@@ -3,6 +3,7 @@ import "./App.css";
 import playButton from "./img/play.svg";
 import pauseButton from "./img/pause.svg";
 import carti from "./midi/pissypamper.mp3";
+import uplifter from "./midi/uplifter.mp3";
 
 class App extends React.Component {
   state = {
@@ -10,11 +11,16 @@ class App extends React.Component {
     track: ""
   };
 
+  currentTrack = () => {
+    return uplifter;
+  };
+
   play = (song, title) => {
     switch (this.state.playing) {
       case "▶️":
         song.play();
         this.setState({ playing: "⏸", track: title });
+        console.log("console");
         break;
       case "⏸":
         song.pause();
@@ -35,7 +41,7 @@ class App extends React.Component {
   };
 
   trackEnd = () => {
-    this.setState({ playing: "⏸", track: "" });
+    this.setState({ playing: "▶️", track: "" });
   };
 
   render() {
@@ -43,41 +49,19 @@ class App extends React.Component {
       <div className="App">
         <audio
           ref="audioRef"
-          src={carti}
+          src={this.currentTrack()}
           id="carti"
           onEnded={() => this.trackEnd()}
         ></audio>
         <div className="Player">
-          <span
-            className="Player-header"
-            onClick={() => console.log(this.picToggle())}
-          >
-            POP 5
-          </span>
+          <span className="Player-header">POP 5</span>
           <div id="playBox">
             <img
               id="controlButton"
-              alt="null"
+              alt="play/pause button"
               src={this.picToggle()}
-              onClick={() =>
-                this.play(
-                  this.refs.audioRef,
-                  "playboi carti - pissy pamper ft. young nudy"
-                )
-              }
+              onClick={() => this.play(this.refs.audioRef, this.currentTrack())}
             ></img>
-            <div
-              id="emojiButton"
-              onClick={() =>
-                this.play(
-                  this.refs.audioRef,
-                  "playboi carti - pissy pamper ft. young nudy"
-                )
-              }
-              text={this.state.playing}
-            >
-              {this.state.playing}
-            </div>
           </div>
           <span className="Current-track">{this.state.track}</span>
         </div>
