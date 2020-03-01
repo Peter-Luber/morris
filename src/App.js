@@ -1,8 +1,9 @@
 import React from "react";
 import "./App.css";
-import helados from "./midi/pissypamper.mp3";
-
-let audio = new Audio(helados);
+import playButton from "./img/play.svg";
+import pauseButton from "./img/pause.svg";
+import carti from "./midi/pissypamper.mp3";
+import uplifter from "./midi/uplifter.mp3";
 
 class App extends React.Component {
   state = {
@@ -10,16 +11,20 @@ class App extends React.Component {
     track: ""
   };
 
+  currentTrack = () => {
+    return uplifter;
+  };
+
   play = (song, title) => {
     switch (this.state.playing) {
       case "▶️":
         song.play();
         this.setState({ playing: "⏸", track: title });
+        console.log("console");
         break;
       case "⏸":
         song.pause();
         this.setState({ playing: "▶️", track: title });
-
         break;
       default:
         console.log("fuck");
@@ -27,46 +32,36 @@ class App extends React.Component {
   };
 
   picToggle = () => {
-    switch (this.state.playing) {
-      case "▶️":
-        return "https://521dimensions.com/img/open-source/amplitudejs/examples/single-song/play.svg";
-      case "⏸":
-        return "https://521dimensions.com/img/open-source/amplitudejs/examples/single-song/pause.svg";
-      default:
-        break;
+    while (this.state.playing === "▶️") {
+      return playButton;
     }
+    while (this.state.playing === "⏸") {
+      return pauseButton;
+    }
+  };
+
+  trackEnd = () => {
+    this.setState({ playing: "▶️", track: "" });
   };
 
   render() {
     return (
       <div className="App">
+        <audio
+          ref="audioRef"
+          src={this.currentTrack()}
+          id="carti"
+          onEnded={() => this.trackEnd()}
+        ></audio>
         <div className="Player">
-          <span
-            className="Player-header"
-            onClick={() => console.log(this.picToggle())}
-          >
-            POP 5
-          </span>
+          <span className="Player-header">POP 5</span>
           <div id="playBox">
             <img
               id="controlButton"
-              alt="null"
+              alt="play/pause button"
               src={this.picToggle()}
-              onClick={() =>
-                this.play(audio, "playboi carti - pissy pamper ft. young nudy")
-              }
-              playing="paused"
+              onClick={() => this.play(this.refs.audioRef, this.currentTrack())}
             ></img>
-            <div
-              id="emojiButton"
-              playing="paused"
-              onClick={() =>
-                this.play(audio, "playboi carti - pissy pamper ft. young nudy")
-              }
-              text={this.state.playing}
-            >
-              {this.state.playing}
-            </div>
           </div>
           <span className="Current-track">{this.state.track}</span>
         </div>
