@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
-import playButton from "./img/play.svg";
-import pauseButton from "./img/pause.svg";
+import paused from "./img/play.svg";
+import playing from "./img/pause.svg";
 import nudy from "./midi/pissypamper.mp3";
 import uplifter from "./midi/uplifter.mp3";
 
 class App extends React.Component {
   state = {
-    button: playButton,
-    title: "pop 5",
+    button: paused,
+    title: "",
     current: 0,
     pop5: [
       {
@@ -25,41 +25,34 @@ class App extends React.Component {
   };
 
   playPause = song => {
-    if (this.state.button === playButton) {
+    if (this.state.button === paused) {
       song.play();
       this.setState({
-        button: pauseButton,
+        button: playing,
         title: this.state.pop5[this.state.current].title
       });
-    } else if (this.state.button === pauseButton && !this.refs.audioRef.ended) {
+    } else if (this.state.button === playing && !this.refs.audioRef.ended) {
       song.pause();
       this.setState({
-        button: playButton
+        button: paused
       });
-    } else if (this.state.button === pauseButton && this.refs.audioRef.ended) {
+    } else if (this.state.button === playing && this.refs.audioRef.ended) {
       song.play();
-    }
-  };
-
-  trackEnd = () => {
-    if (this.refs.audioRef.ended) {
-      this.setState({
-        title: this.state.pop5[this.state.current + 1].title,
-        current: this.state.current + 1
-      });
-    } else {
-      this.setState({
-        button: playButton,
-        title: ""
-      });
     }
   };
 
   endCycle = () => {
-    this.trackEnd();
-    console.log(this.refs.audioRef.ended);
-    console.log(this.refs.audioRef);
-    this.refs.audioRef.play();
+    this.setState(
+      {
+        title: this.state.pop5[this.state.current + 1].title,
+        current: this.state.current + 1,
+        button: paused
+      },
+      () => {
+        this.refs.audioRef.load();
+        this.playPause(this.refs.audioRef);
+      }
+    );
   };
 
   render() {
@@ -80,11 +73,7 @@ class App extends React.Component {
               onClick={() => this.playPause(this.refs.audioRef)}
             ></img>
           </div>
-          <span className="Current-track">
-            {this.state.current + 1}
-            <br></br>
-            {this.state.title}
-          </span>
+          <span className="Current-track">{this.state.title}</span>
         </div>
       </div>
     );
