@@ -4,6 +4,7 @@ import paused from "./img/play.svg";
 import playing from "./img/pause.svg";
 import nudy from "./midi/pissypamper.mp3";
 import uplifter from "./midi/uplifter.mp3";
+import carti from "./midi/alotOnMyMind.mp3";
 
 class App extends React.Component {
   state = {
@@ -13,13 +14,21 @@ class App extends React.Component {
     pop5: [
       {
         id: 1,
-        title: "lex luger riser",
+        title: "riser",
+        artist: "lex luger",
         url: uplifter
       },
       {
         id: 2,
-        title: "young nudy - pissy pamper ft. playboi carti",
+        title: "pissy pamper ft. playboi carti",
+        artist: "young nudy",
         url: nudy
+      },
+      {
+        id: 3,
+        title: "alot on my mind",
+        artist: "playboi carti",
+        url: carti
       }
     ]
   };
@@ -29,7 +38,8 @@ class App extends React.Component {
       song.play();
       this.setState({
         button: playing,
-        title: this.state.pop5[this.state.current].title
+        title: this.state.pop5[this.state.current].title,
+        artist: this.state.pop5[this.state.current].artist
       });
     } else if (this.state.button === playing && !this.refs.audioRef.ended) {
       song.pause();
@@ -55,6 +65,15 @@ class App extends React.Component {
     );
   };
 
+  keyCtrl = event => {
+    if (event.key === " ") {
+      this.refs.imgRef.click();
+      
+    }
+  };
+
+
+
   render() {
     return (
       <div className="App">
@@ -63,17 +82,27 @@ class App extends React.Component {
           src={this.state.pop5[this.state.current].url}
           onEnded={() => this.endCycle()}
         ></audio>
-        <div className="Player">
-          <span className="Player-header">POP 5</span>
-          <div id="playBox">
-            <img
-              id="controlButton"
-              alt="play/pause button"
-              src={this.state.button}
-              onClick={() => this.playPause(this.refs.audioRef)}
-            ></img>
+        <div
+          className="Player"
+          onKeyDown={this.keyCtrl}
+          autofocus="true"
+          tabIndex="1"
+        >
+          <div id="accentLine">
+            <div className="Current-track">morris - pop 5</div>
+            <div className="Player-header">
+              {this.state.artist} - {this.state.title}
+            </div>
+            <div id="playBox">
+              <img
+                id="controlButton"
+                ref="imgRef"
+                alt="play/pause button"
+                src={this.state.button}
+                onClick={() => this.playPause(this.refs.audioRef)}
+              ></img>
+            </div>
           </div>
-          <span className="Current-track">{this.state.title}</span>
         </div>
       </div>
     );
