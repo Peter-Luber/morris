@@ -68,11 +68,8 @@ class App extends React.Component {
   keyCtrl = event => {
     if (event.key === " ") {
       this.refs.imgRef.click();
-      
     }
   };
-
-
 
   render() {
     return (
@@ -91,7 +88,8 @@ class App extends React.Component {
           <div id="accentLine">
             <div className="Current-track">morris - pop 5</div>
             <div className="Player-header">
-              {this.state.artist} - {this.state.title}
+              <div id="title">{this.state.title}</div>
+              <div id="artist">{this.state.artist}</div>
             </div>
             <div id="playBox">
               <img
