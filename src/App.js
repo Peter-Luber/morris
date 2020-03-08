@@ -12,10 +12,12 @@ class App extends React.Component {
     current: 0,
     pop5: [
       {
+        id: 1,
         title: "lex luger riser",
         url: uplifter
       },
       {
+        id: 2,
         title: "young nudy - pissy pamper ft. playboi carti",
         url: nudy
       }
